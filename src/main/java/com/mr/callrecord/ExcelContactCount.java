@@ -2,6 +2,7 @@ package com.mr.callrecord;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -30,16 +31,12 @@ public class ExcelContactCount extends Configured implements Tool {
             
             
             String[] records = line.split("\\s+");
+            System.out.println("records"+Arrays.asList(records));
             // 获取月份
-            String[] months = records[3].split("-");
-            for(String str:records){
-            	System.out.println("records="+str);
-            }
-            for(String str:months){
-            	System.out.println("months="+str);
-            }
+            String[] months = records[3].split("/");
+            System.out.println("months="+Arrays.asList(months));
             // 昵称+月份
-            //pkey.set(records[1] + "\t" + months[1]);
+            pkey.set(records[1] + "\t" + months[1]);
             // 手机号
             pvalue.set(records[2]);
             
