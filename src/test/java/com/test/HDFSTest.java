@@ -7,6 +7,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.RawLocalFileSystem;
 import org.apache.hadoop.fs.permission.FsAction;
 import org.apache.hadoop.hdfs.protocol.proto.ClientNamenodeProtocolProtos.GetFileInfoRequestProto;
 
@@ -32,8 +33,8 @@ public class HDFSTest {
 	    //System.out.println(bool);
 		//uploadFile(fs);
 		//deleteFile(fs);
-		getFile(fs);
-		//createFile(fs);
+		//getFile(fs);
+		createFile(fs);
 		
 		//fs.createNonRecursive(f, overwrite, bufferSize, replication, blockSize, progress)
 	    fs.close();
@@ -46,10 +47,11 @@ public class HDFSTest {
 	}
 	
 	public static void createFile(FileSystem fs) throws Exception{
-		Path path = new Path("/test1/test.java");
+		Path path = new Path("/test1/test.php");
+		fs.setVerifyChecksum(true);
 		FSDataOutputStream create = fs.create(path, true);
 		//fs.
-		create.writeUTF("test1234");
+		create.writeUTF("php");
 		create.flush();
 		create.close();
 		System.out.println("end...");
