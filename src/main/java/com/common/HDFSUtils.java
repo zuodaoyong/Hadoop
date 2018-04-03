@@ -15,7 +15,6 @@ import org.apache.hadoop.fs.RemoteIterator;
 import org.apache.hadoop.fs.permission.FsAction;
 import org.apache.hadoop.fs.permission.FsPermission;
 import org.apache.hadoop.io.SequenceFile;
-import org.apache.hadoop.io.SequenceFile.Reader.Option;
 import org.apache.hadoop.io.SequenceFile.Writer;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.util.Progressable;
@@ -147,6 +146,7 @@ public class HDFSUtils {
 	    	System.out.println(key.toString());
 	    	System.out.println(value.toString());
 	    }
+	    reader.close();
 	}
 	
 	/**
@@ -163,6 +163,7 @@ public class HDFSUtils {
 	    	System.out.println(key.toString());
 	    	System.out.println(value.toString());
 	    }
+	    reader.close();
 	}
 	private static Path getPath(String str){
 		Path path=new Path(str);
