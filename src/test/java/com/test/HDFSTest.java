@@ -34,7 +34,7 @@ public class HDFSTest {
 		//uploadFile(fs);
 		//deleteFile(fs);
 		//getFile(fs);
-		createFile(fs);
+		//createFile(fs);
 		
 		//fs.createNonRecursive(f, overwrite, bufferSize, replication, blockSize, progress)
 	    fs.close();

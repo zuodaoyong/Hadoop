@@ -16,6 +16,7 @@ import org.apache.hadoop.fs.permission.FsAction;
 import org.apache.hadoop.fs.permission.FsPermission;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.SequenceFile.Reader.Option;
+import org.apache.hadoop.io.SequenceFile.Writer;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.util.Progressable;
 import org.mortbay.util.ajax.JSON;
@@ -103,7 +104,7 @@ public class HDFSUtils {
 		}
 	}
 	/**
-	 * 合并小文件
+	 * 合并小文件(旧版本写法)
 	 * @param srcDirectory
 	 * @throws IOException 
 	 */
@@ -116,6 +117,28 @@ public class HDFSUtils {
 		logger.info("mergeSmallFile success");
 	}
 	
+	/**
+	 * 合并小文件(新版本写法)
+	 * @param srcDirectory
+	 * @throws IOException 
+	 */
+	public static void mergeSmallFile_new(String srcDirectory,String destPath) throws IOException{
+		SequenceFile.Writer.Option pathOption= Writer.file(getPath(destPath));
+		SequenceFile.Writer.Option keyClassOption=Writer.keyClass(Text.class);
+		SequenceFile.Writer.Option valueOption=Writer.valueClass(Text.class);
+		SequenceFile.Writer writer=SequenceFile.createWriter(configuration, pathOption,keyClassOption,valueOption);
+		File file = new File(srcDirectory);
+		for(File f:file.listFiles()){
+			writer.append(new Text(f.getName()),new Text(FileUtils.readFileToString(f)));
+		}
+		logger.info("mergeSmallFile success");
+	}
+	
+	/**
+	 * 读取合并的小文件（旧版本）
+	 * @param srcPath
+	 * @throws IOException
+	 */
 	public static void readMergeSmallFile(String srcPath) throws IOException{
 		SequenceFile.Reader reader=new SequenceFile.Reader(fileSystem, getPath(srcPath), configuration);
 	    Text key=new Text();
@@ -126,6 +149,21 @@ public class HDFSUtils {
 	    }
 	}
 	
+	/**
+	 * 读取合并的小文件（新版本）
+	 * @param srcPath
+	 * @throws IOException
+	 */
+	public static void readMergeSmallFile_new(String srcPath) throws IOException{
+		SequenceFile.Reader.Option pathOption=SequenceFile.Reader.file(getPath(srcPath));
+		SequenceFile.Reader reader=new SequenceFile.Reader(configuration, pathOption);
+	    Text key=new Text();
+	    Text value=new Text();
+	    while(reader.next(key,value)){
+	    	System.out.println(key.toString());
+	    	System.out.println(value.toString());
+	    }
+	}
 	private static Path getPath(String str){
 		Path path=new Path(str);
 		return path;
