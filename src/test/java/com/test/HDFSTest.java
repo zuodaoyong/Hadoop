@@ -21,8 +21,8 @@ public class HDFSTest {
 	}
 	private static FileSystem init2() throws Exception{
 		Configuration conf=new Configuration();
-		conf.set("fs.defaultFS","hdfs://192.168.237.128:8020");
-		FileSystem fs=FileSystem.get(new URI("hdfs://192.168.237.128:8020"), conf, "root");
+		conf.set("fs.defaultFS","hdfs://test1:8020");
+		FileSystem fs=FileSystem.get(new URI("hdfs://test1:8020"), conf, "root");
 		return fs;
 	}
 	public static void main(String[] args) throws Exception {

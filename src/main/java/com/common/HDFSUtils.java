@@ -131,6 +131,7 @@ public class HDFSUtils {
 			writer.append(new Text(f.getName()),new Text(FileUtils.readFileToString(f)));
 		}
 		logger.info("mergeSmallFile success");
+		writer.close();
 	}
 	
 	/**
@@ -164,6 +165,27 @@ public class HDFSUtils {
 	    	System.out.println(value.toString());
 	    }
 	    reader.close();
+	}
+	
+	/**
+	 * 修改文件名
+	 * @param oldPath
+	 * @param newPath
+	 * @throws IOException
+	 */
+	public static void reFileName(String oldPath,String newPath) throws IOException{
+		fileSystem.rename(getPath(oldPath), getPath(newPath));
+		logger.info("reFileName success");
+	}
+	
+	/**
+	 * 删除文件
+	 * @param path
+	 * @throws Exception
+	 */
+	public static void deleteFile(String path) throws Exception{
+		fileSystem.delete(getPath(path), true);
+		logger.info("delete success");
 	}
 	private static Path getPath(String str){
 		Path path=new Path(str);
