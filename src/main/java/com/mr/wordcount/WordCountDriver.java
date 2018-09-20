@@ -22,8 +22,8 @@ public class WordCountDriver {
 		job.setMapOutputValueClass(IntWritable.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
-		FileInputFormat.setInputPaths(job, new Path("E:\\学习文档\\hadoop\\data\\input\\wordcount\\wordcount.txt"));
-	    FileOutputFormat.setOutputPath(job, new Path("E:\\学习文档\\hadoop\\data\\output\\wordcount\\wordcountOutput.txt"));
+		FileInputFormat.setInputPaths(job, new Path(args[0]));
+	    FileOutputFormat.setOutputPath(job, new Path(args[1]));
 	    boolean waitForCompletion = job.waitForCompletion(true);
 	    System.exit(waitForCompletion==true?0:1);
 	    
