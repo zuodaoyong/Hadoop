@@ -161,7 +161,6 @@
            </executions>  
        </plugin>
        <!-- 打包时加入依赖包 -->
-       <!-- 
        <plugin>
            <artifactId>maven-assembly-plugin</artifactId>
            <configuration>
@@ -180,7 +179,6 @@
                </execution>
            </executions>
        </plugin> 
-        -->
     </plugins>
   </build>
 </project>
