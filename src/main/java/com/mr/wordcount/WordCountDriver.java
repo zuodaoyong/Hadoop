@@ -6,6 +6,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.CombineTextInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
@@ -22,8 +23,12 @@ public class WordCountDriver {
 		job.setMapOutputValueClass(IntWritable.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
-		FileInputFormat.setInputPaths(job, new Path(args[0]));
-	    FileOutputFormat.setOutputPath(job, new Path(args[1]));
+		//将小文件合并成大文件
+		job.setInputFormatClass(CombineTextInputFormat.class);
+		CombineTextInputFormat.setMaxInputSplitSize(job, 128*1024*102);
+		CombineTextInputFormat.setMinInputSplitSize(job, 128*1024*102);
+		FileInputFormat.setInputPaths(job, new Path("E:\\学习文档\\hadoop\\data\\input\\wordcount"));
+	    FileOutputFormat.setOutputPath(job, new Path("E:\\学习文档\\hadoop\\data\\output"));
 	    boolean waitForCompletion = job.waitForCompletion(true);
 	    System.exit(waitForCompletion==true?0:1);
 	    
