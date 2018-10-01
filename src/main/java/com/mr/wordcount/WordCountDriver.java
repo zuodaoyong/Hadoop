@@ -13,7 +13,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 public class WordCountDriver {
 
 	public static void main(String[] args) throws Exception {
-		
+		System.setProperty("hadoop.home.dir", "D:\\software\\hadoop-2.7.2");
 		Configuration configuration=new Configuration();
 		Job job = Job.getInstance(configuration);
 		job.setJarByClass(WordCountDriver.class);
@@ -27,8 +27,12 @@ public class WordCountDriver {
 		job.setInputFormatClass(CombineTextInputFormat.class);
 		CombineTextInputFormat.setMaxInputSplitSize(job, 128*1024*102);
 		CombineTextInputFormat.setMinInputSplitSize(job, 128*1024*102);
-		FileInputFormat.setInputPaths(job, new Path("E:\\学习文档\\hadoop\\data\\input\\wordcount"));
-	    FileOutputFormat.setOutputPath(job, new Path("E:\\学习文档\\hadoop\\data\\output"));
+		//设置combiner
+		//job.setCombinerClass(WordCountCombiner.class);//WordCountCombiner和WordCountReduce的业务一样，所以不用特地去写combiner类
+		job.setCombinerClass(WordCountReduce.class);
+		
+		FileInputFormat.setInputPaths(job, new Path("D:\\software\\temp\\hadoop\\wordcount"));
+	    FileOutputFormat.setOutputPath(job, new Path("D:\\software\\temp\\hadoop\\wordcount\\output"));
 	    boolean waitForCompletion = job.waitForCompletion(true);
 	    System.exit(waitForCompletion==true?0:1);
 	    
