@@ -5,6 +5,8 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.compress.BZip2Codec;
+import org.apache.hadoop.io.compress.CompressionCodec;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.CombineTextInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
@@ -15,6 +17,9 @@ public class WordCountDriver {
 	public static void main(String[] args) throws Exception {
 		System.setProperty("hadoop.home.dir", "D:\\software\\hadoop-2.7.2");
 		Configuration configuration=new Configuration();
+		//开启map端压缩
+		configuration.setBoolean("mapreduce.map.output.compress",true);
+		configuration.setClass("mapreduce.map.output.compress.codec",BZip2Codec.class, CompressionCodec.class);
 		Job job = Job.getInstance(configuration);
 		job.setJarByClass(WordCountDriver.class);
 		job.setMapperClass(WordCountMapper.class);
@@ -30,6 +35,10 @@ public class WordCountDriver {
 		//设置combiner
 		//job.setCombinerClass(WordCountCombiner.class);//WordCountCombiner和WordCountReduce的业务一样，所以不用特地去写combiner类
 		job.setCombinerClass(WordCountReduce.class);
+		//设置reduce端压缩开启
+		FileOutputFormat.setCompressOutput(job, true);
+		//设置压缩方式
+		FileOutputFormat.setOutputCompressorClass(job, BZip2Codec.class);
 		
 		FileInputFormat.setInputPaths(job, new Path("D:\\software\\temp\\hadoop\\wordcount"));
 	    FileOutputFormat.setOutputPath(job, new Path("D:\\software\\temp\\hadoop\\wordcount\\output"));
