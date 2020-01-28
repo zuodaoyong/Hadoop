@@ -8,15 +8,16 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.IOUtils;
-import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 
-public class WholeRecordReader extends RecordReader<NullWritable,BytesWritable>{
+public class WholeRecordReader extends RecordReader<Text,BytesWritable>{
 
 	private BytesWritable value=new BytesWritable();
+	private Text key=new Text();
     private boolean isProcess=false;
     private FileSplit fileSplit;
     private Configuration configuration;
@@ -25,8 +26,8 @@ public class WholeRecordReader extends RecordReader<NullWritable,BytesWritable>{
 	}
 
 	@Override
-	public NullWritable getCurrentKey() throws IOException, InterruptedException {
-		return NullWritable.get();
+	public Text getCurrentKey() throws IOException, InterruptedException {
+		return key;
 	}
 
 	@Override
@@ -60,6 +61,7 @@ public class WholeRecordReader extends RecordReader<NullWritable,BytesWritable>{
 				inputStream = fileSystem.open(path);
 				IOUtils.readFully(inputStream, bs, 0,bs.length);
 				value.set(bs, 0, bs.length);
+                key.set(path.toString());
 			}catch(Exception e){
 				e.printStackTrace();
 			}finally {

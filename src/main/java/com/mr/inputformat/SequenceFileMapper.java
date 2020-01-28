@@ -10,7 +10,7 @@ import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 
-public class SequenceFileMapper extends Mapper<NullWritable, BytesWritable, Text, BytesWritable>{
+public class SequenceFileMapper extends Mapper<Text, BytesWritable, Text, BytesWritable>{
 
 	private Text key=new Text();
 	@Override
@@ -23,7 +23,7 @@ public class SequenceFileMapper extends Mapper<NullWritable, BytesWritable, Text
 	}
 	
 	@Override
-	protected void map(NullWritable key, BytesWritable value,
+	protected void map(Text key, BytesWritable value,
 			Context context)
 			throws IOException, InterruptedException {
 		context.write(this.key,value);
