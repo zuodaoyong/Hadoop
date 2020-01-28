@@ -10,6 +10,17 @@ import org.apache.hadoop.mapreduce.lib.input.KeyValueLineRecordReader;
 import org.apache.hadoop.mapreduce.lib.input.KeyValueTextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
+/**
+ * 统计输入文件中每一行的第一个单词相同的行数。
+ * （1）输入数据
+ * banzhang ni hao
+ * xihuan hadoop banzhang
+ * banzhang ni hao
+ * xihuan hadoop banzhang
+ * （2）期望结果数据
+ * banzhang	2
+ * xihuan	2
+ */
 public class KeyValueTextInputFormatDriver {
     public static void main(String[] args) throws Exception{
 
