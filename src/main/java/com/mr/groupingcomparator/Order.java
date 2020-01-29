@@ -4,23 +4,22 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 
 public class Order implements WritableComparable<Order>{
 
 	private String id;
-	private float price;
+	private Float price;
 	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
 	}
-	public float getPrice() {
+	public Float getPrice() {
 		return price;
 	}
-	public void setPrice(float price) {
+	public void setPrice(Float price) {
 		this.price = price;
 	}
 	@Override
@@ -36,7 +35,7 @@ public class Order implements WritableComparable<Order>{
 	@Override
 	public int compareTo(Order o) {
 		if(o.getId().equals(this.id)){
-			return this.price>o.getPrice()?-1:1;
+			return o.getPrice().compareTo(this.getPrice());
 		}else{
 			return this.id.compareTo(o.getId());
 		}
