@@ -14,10 +14,6 @@ public class OrderGroupingCompartor extends WritableComparator{
 	public int compare(WritableComparable a, WritableComparable b) {
 		Order aOrder=(Order) a;
 		Order bOrder=(Order) b;
-		if(aOrder.getId().equals(bOrder.getId())){
-		   return aOrder.getId().compareTo(bOrder.getId());
-		}else{
-			return 0;
-		}
+		return aOrder.getId().compareTo(bOrder.getId());
 	}
 }

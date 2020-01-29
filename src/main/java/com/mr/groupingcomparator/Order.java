@@ -40,7 +40,6 @@ public class Order implements WritableComparable<Order>{
 		}else{
 			return this.id.compareTo(o.getId());
 		}
-		//return 0;
 	}
 	@Override
 	public String toString() {
