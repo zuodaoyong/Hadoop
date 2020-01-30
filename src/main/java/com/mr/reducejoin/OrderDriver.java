@@ -1,6 +1,5 @@
 package com.mr.reducejoin;
 
-import java.io.IOException;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -13,6 +12,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 public class OrderDriver {
 
 	public static void main(String[] args) throws Exception {
+		System.setProperty("HADOOP_USER_NAME", "root");
 		Configuration configuration=new Configuration();
 		Job job = Job.getInstance(configuration);
 		job.setMapperClass(OrderMapper.class);
@@ -21,8 +21,8 @@ public class OrderDriver {
 		job.setReducerClass(OrderReduce.class);
 		job.setOutputKeyClass(OrderWrapper.class);
 		job.setOutputValueClass(NullWritable.class);
-		FileInputFormat.setInputPaths(job, new Path("D:\\software\\temp\\hadoop\\join"));
-		FileOutputFormat.setOutputPath(job, new Path("D:\\software\\temp\\hadoop\\join\\output"));
+		FileInputFormat.setInputPaths(job, new Path("/mapreduce/join"));
+		FileOutputFormat.setOutputPath(job, new Path("/mapreduce/join/output"));
 		boolean waitForCompletion = job.waitForCompletion(true);
 	    System.exit(waitForCompletion==true?0:1);
 	}

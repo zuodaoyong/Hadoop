@@ -1,6 +1,5 @@
 package com.mr.mapjoin;
 
-import java.io.IOException;
 import java.net.URI;
 
 import org.apache.hadoop.conf.Configuration;
@@ -15,6 +14,7 @@ import com.mr.reducejoin.OrderWrapper;
 public class DistributedCacheDriver {
 
 	public static void main(String[] args) throws Exception {
+		System.setProperty("HADOOP_USER_NAME", "root");
 		Configuration configuration=new Configuration();
 		Job job = Job.getInstance(configuration);
 		job.setMapperClass(DistributedCacheMapper.class);
@@ -22,11 +22,12 @@ public class DistributedCacheDriver {
 		job.setMapOutputValueClass(NullWritable.class);
 		
 		//添加缓存数据
-		job.addCacheFile(new URI("file:///D:/software/temp/hadoop/join/pd.txt"));
+		job.addCacheFile(new URI("/mapreduce/join/pd"));
+		//Map端Join的逻辑不需要Reduce阶段，设置reduceTask数量为0
 		job.setNumReduceTasks(0);
 		
-		FileInputFormat.setInputPaths(job, new Path("D:\\software\\temp\\hadoop\\join\\order.txt"));
-		FileOutputFormat.setOutputPath(job, new Path("D:\\software\\temp\\hadoop\\join\\output"));
+		FileInputFormat.setInputPaths(job, new Path("/mapreduce/join/order"));
+		FileOutputFormat.setOutputPath(job, new Path("/mapreduce/join/output"));
 		boolean waitForCompletion = job.waitForCompletion(true);
 	    System.exit(waitForCompletion==true?0:1);
 	}

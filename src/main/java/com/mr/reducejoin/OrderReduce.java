@@ -1,7 +1,6 @@
 package com.mr.reducejoin;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 

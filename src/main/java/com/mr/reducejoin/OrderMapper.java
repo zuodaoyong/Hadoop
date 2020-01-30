@@ -21,9 +21,8 @@ public class OrderMapper extends Mapper<LongWritable,Text,Text,OrderWrapper>{
 		//获取一行
 		String line = value.toString();
 		if(StringUtils.isNotEmpty(line)){
-			
-			if("order.txt".equals(fileName)){//订单表  1001 01 1
-				String[] splits = line.split(" ");
+			if("order".equals(fileName)){//订单表  1001 01 1
+				String[] splits = line.split("\t");
 				order.setId(splits[0]);
 				order.setPid(splits[1]);
 				order.setAmount(Integer.valueOf(splits[2]));
@@ -31,7 +30,7 @@ public class OrderMapper extends Mapper<LongWritable,Text,Text,OrderWrapper>{
 				order.setPname("");
 				k.set(splits[1]);
 			}else{//产品表 01 小米
-				String[] splits = line.split(" ");
+				String[] splits = line.split("\t");
 				order.setPid(splits[0]);
 				order.setPname(splits[1]);
 				order.setId("");

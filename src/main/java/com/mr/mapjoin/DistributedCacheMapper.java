@@ -4,10 +4,14 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.util.Map;
 
 import org.apache.commons.collections4.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
@@ -26,11 +30,17 @@ public class DistributedCacheMapper extends Mapper<LongWritable, Text,OrderWrapp
 	protected void setup(Context context)
 			throws IOException, InterruptedException {
 		//获取缓存的文件
-		bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream("pd.txt"),"UTF-8"));
-	    String line=null;
-		while(StringUtils.isNotEmpty(line=bufferedReader.readLine())){
-			splits = line.split(" ");
-			map.put(splits[0], splits[1]);
+		URI[] cacheFiles = context.getCacheFiles();
+		String path = cacheFiles[0].getPath().toString();
+		FileSystem fileSystem = FileSystem.get(context.getConfiguration());
+		FSDataInputStream hdfsInStream = fileSystem.open(new Path(path));
+		bufferedReader = new BufferedReader(new InputStreamReader(hdfsInStream, "UTF-8"));
+		String line;
+		while(StringUtils.isNotEmpty(line = bufferedReader.readLine())) {
+			// 2 切割
+			String[] fields = line.split("\t");
+			// 3 缓存数据到集合
+			map.put(fields[0], fields[1]);
 		}
 		//关闭流
 		bufferedReader.close();
@@ -42,10 +52,10 @@ public class DistributedCacheMapper extends Mapper<LongWritable, Text,OrderWrapp
 			throws IOException, InterruptedException {
 		FileSplit fileSplit = (FileSplit) context.getInputSplit();
 		String fileName = fileSplit.getPath().getName();
-		if(!"pd.txt".equals(fileName)){
+		if(!"pd".equals(fileName)){
 			String line = value.toString();
 			if(StringUtils.isNotEmpty(line)){
-				String[] splits = line.split(" ");
+				String[] splits = line.split("\t");
 				OrderWrapper wrapper=new OrderWrapper();
 				wrapper.setId(splits[0]);
 				wrapper.setPid(splits[1]);
