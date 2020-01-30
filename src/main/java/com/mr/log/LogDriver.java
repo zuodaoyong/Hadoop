@@ -11,14 +11,15 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 public class LogDriver {
     public static void main(String[] args) throws Exception{
-		Configuration configuration=new Configuration();
+		System.setProperty("HADOOP_USER_NAME", "root");
+    	Configuration configuration=new Configuration();
 		Job job = Job.getInstance(configuration);
 		job.setMapperClass(LogMapper.class);
 		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(NullWritable.class);
 		job.setNumReduceTasks(0);
-		FileInputFormat.setInputPaths(job, new Path("D:\\software\\temp\\hadoop\\log"));
-		FileOutputFormat.setOutputPath(job, new Path("D:\\software\\temp\\hadoop\\log\\output"));
+		FileInputFormat.setInputPaths(job, new Path("/mapreduce/log/web"));
+		FileOutputFormat.setOutputPath(job, new Path("/mapreduce/log/output"));
 		boolean waitForCompletion = job.waitForCompletion(true);
 	    System.exit(waitForCompletion==true?0:1);
 	}	
