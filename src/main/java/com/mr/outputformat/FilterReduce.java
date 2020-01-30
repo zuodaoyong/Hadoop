@@ -11,8 +11,9 @@ public class FilterReduce extends Reducer<Text, NullWritable, Text, NullWritable
 	@Override
 	protected void reduce(Text text, Iterable<NullWritable> iterable,
 			Context context) throws IOException, InterruptedException {
-		String line = text.toString();
-		line+="\r\n";
-		context.write(new Text(line), NullWritable.get());
+		//防止text重复被过滤掉
+		for(NullWritable nullWritable:iterable){
+			context.write(new Text(text.toString()+"\r\n"), NullWritable.get());
+		}
 	}
 }
